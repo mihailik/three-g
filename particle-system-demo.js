@@ -21,7 +21,7 @@ window.scene = scene;
 // Debug cube to verify scene rendering
 scene.add(new THREE.Mesh(
   new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x00ff80, wireframe: true, visible: false })  // Hidden by default
+  new THREE.MeshBasicMaterial({ color: 0x00ff80, wireframe: true, visible: true })  // Visible to verify rendering
 ));
 
 container.style.cssText =
@@ -92,6 +92,9 @@ outcome.animate = () => {
   }
   
   physics.compute();
+  
+  // Restore THREE.js WebGL state after physics compute
+  renderer.resetState();
   
   // Just swap which wrapper we use - no recreation, no copying
   const currentIndex = physics.getCurrentIndex();
