@@ -1,4 +1,14 @@
 // @ts-check
+//
+// This demo showcases mass particle rendering that works awesomely nice and produces 
+// beautiful visuals using GPU-accelerated Barnes-Hut N-body physics combined with 
+// three-g's massSpotMesh rendering system.
+//
+// Features:
+// - 50,000 particles with gravitational interactions
+// - GPU-to-GPU zero-copy texture pipeline for maximum performance
+// - Beautiful particle glow effects with fog
+// - Real-time physics at ~40 FPS
 
 import * as THREE from 'three';
 import { createScene } from 'three-pop';

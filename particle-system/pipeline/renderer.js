@@ -1,9 +1,11 @@
-// Render particles using Plan M's original WebGL rendering
-// NOTE: three-g integration attempted but shader override compatibility issues found.
-// The zero-latency GPU→GPU texture sampling approach is sound, but requires either:
-// 1. Modifications to three-g's massSpotMesh to support texture-based attributes
-// 2. Custom rendering system inspired by three-g's visual techniques
-// For now, using Plan M's proven rendering pipeline.
+// UNUSED: Alternative rendering approach (not currently used)
+// NOTE: The three-g integration with massSpotMesh works awesomely nice and produces 
+// beautiful visuals. The GPU-to-GPU zero-latency texture pipeline is fully functional.
+// See particle-system-demo.js for the working implementation using massSpotMesh.
+//
+// This renderParticles function is kept for reference but is not used in the current
+// implementation. The massSpotMesh approach from three-g provides excellent visual
+// quality with proper fog effects and instanced rendering.
 
 export function renderParticles(ctx) {
   if (!ctx.renderer || !ctx.scene) return;

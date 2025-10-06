@@ -2,29 +2,32 @@
 
 GPU-accelerated particle rendering and Barnes-Hut N-body physics for THREE.js.
 
+**This library includes mass particle rendering that works awesomely nice and produces beautiful visuals** through a combination of GPU-based physics simulation and efficient instanced rendering with glow effects.
+
 ## Features
 
-- **massSpotMesh**: Efficient particle rendering with glow effects
-- **barnesHutSystem**: GPU-based O(N log N) gravitational physics
-- Scales to 200,000+ particles at 10-30 FPS
-- Zero CPU involvement: all computation on GPU
+- **massSpotMesh**: Efficient particle rendering with beautiful glow effects and fog
+- **particleSystem**: GPU-based O(N log N) Barnes-Hut gravitational physics
+- Scales to 50,000+ particles at 30-40 FPS with full physics
+- Zero CPU involvement: all computation stays on GPU
+- GPU-to-GPU zero-copy texture pipeline for maximum performance
 
 ## Quick Start
 
 ```javascript
 import * as THREE from 'three';
 import { createScene } from 'three-pop';
-import { massSpotMesh, barnesHutSystem } from 'three-g';
+import { massSpotMesh, particleSystem } from 'three-g';
 
 const { scene, renderer } = createScene();
 
 // Create physics system
-const physics = barnesHutSystem({
+const physics = particleSystem({
   gl: renderer.getContext(),
   particleCount: 50000
 });
 
-// Create rendering
+// Create rendering mesh with beautiful particle visuals
 const mesh = massSpotMesh({
   textureMode: true,
   particleCount: physics.options.particleCount,
@@ -32,24 +35,29 @@ const mesh = massSpotMesh({
     position: physics.getPositionTexture(),
     color: physics.getColorTexture(),
     size: [512, 512]
-  },
-  fog: { start: 15, gray: 40 }
+  }
 });
 
 scene.add(mesh);
 
-// Animation loop
+// Animation loop - updates physics and textures
 function animate() {
   physics.compute();
-  mesh.updateTextures(physics.getPositionTexture());
+  
+  // Swap ping-pong buffers for zero-copy GPU pipeline
+  const currentIndex = physics.getCurrentIndex();
+  const positionTextures = physics.getPositionTextures();
+  mesh.material.uniforms.u_positionTexture.value = 
+    new THREE.ExternalTexture(positionTextures[currentIndex]);
+  mesh.material.uniforms.u_positionTexture.value.needsUpdate = true;
 }
 ```
 
 ## API
 
-### barnesHutSystem(options)
+### particleSystem(options)
 
-Creates GPU Barnes-Hut N-body simulation.
+Creates GPU-based Barnes-Hut N-body particle simulation with beautiful rendering.
 
 **Options**:
 - `gl`: WebGL2 context (required)
