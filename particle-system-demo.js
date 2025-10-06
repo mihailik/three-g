@@ -33,7 +33,7 @@ document.body.appendChild(container);
 
 // 2. Initialize Barnes-Hut GPU Physics
 const gl = renderer.getContext();
-const particleCount = 50000;
+const particleCount = 500000;  // Increased 10x from 50000
 
 console.log('TEST: Initializing physics but NOT calling compute...');
 
@@ -45,10 +45,10 @@ const physics = particleSystem({
     max: [4, 4, 2]
   },
   theta: 0.5,
-  gravityStrength: 0.0003,
+  gravityStrength: 0.006,  // Increased 20x from 0.0003
   softening: 0.2,
   initialSpeed: 0.05,
-  dt: 1 / 60  // Reduced from 10/60 to 1/60 for slower motion
+  dt: 10 / 60  // Increased 10x from 1/60 for faster motion
 });
 
 // Get texture info
