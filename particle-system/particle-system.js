@@ -414,6 +414,7 @@ export class ParticleSystem {
       pipelineUpdateBounds(this, 256);
     }
     this.buildQuadtree();
+    this.clearForceTexture();
     pipelineCalculateForces(this);
     pipelineIntegratePhysics(this);
     
